@@ -1,0 +1,35 @@
+Messages:
+  Dont_Have_Permission: "&cYou don't have permission."
+  Not_Available: "&cNot available in this world."
+  Config_Reloaded: "&aConfig has been reloaded."
+  Fixed: "&aWas fixed display time."
+  Help:
+    Help: "Show this help."
+    Show: "Show title of this world."
+    Fix: "Fix display time."
+    Reload: "Reload config file."
+
+FixTitleTime:
+# Will fix the display time of Title at the time of login of the player.
+# It provides fixes in command even when it is set to false.
+  Enable: true
+# In seconds...
+  Fadein: 0.5
+  Show: 1.75
+  Fadeout: 0.5
+
+Worlds:
+  world:
+    title: "&2World"
+  world_nether:
+    title: "&cNether"
+    subtitle: "world_nether"
+  world_the_end:
+    title: "&8The End"
+    subtitle: "&kworld_the_end"
+# Syntax ------>
+#  world_name:
+#    title: "maintitle message."
+#    subtitle: "&c&o&l&o&r&c&o&d&e subtitle message.(&&escape is &&)"
+# <------ Syntax
+# Color code is lowercase.

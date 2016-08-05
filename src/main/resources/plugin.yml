@@ -1,0 +1,24 @@
+main: ${project.groupId}.thisworld.${project.artifactId}
+name: "${project.artifactId}"
+version: "${project.version}"
+website: https://jyn.jp/
+author: '@HimaJyun'
+
+commands:
+   thisworld:
+     description: 'Show this world name.'
+   tw:
+     description: 'Alias of "/thisworld"'
+
+permissions:
+  thisworld.*:
+    children:
+      thisworld.show: true
+      thisworld.fix: true
+      thisworld.reload: true
+  thisworld.show:
+    default: true
+  thisworld.fix:
+    default: true
+  thisworld.reload:
+    default: op
