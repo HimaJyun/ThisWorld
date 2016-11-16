@@ -46,7 +46,7 @@ public class SendingListener implements Listener {
 		if (titles.containsKey(world)) { // 世界が登録されている
 			Messages message = titles.get(world);
 			// 送信
-			titleSender.sendTitle(player, message.title, message.subTitle);
+			titleSender.sendTitle(player, message.title, message.subTitle, message.actionBar);
 		}
 	}
 }

@@ -27,6 +27,7 @@ Worlds:
   world_the_end:
     title: "&8The End"
     subtitle: "&kworld_the_end"
+    actionbar: "vs EnderDragon"
 # Syntax ------>
 #  world_name:
 #    title: "maintitle message."

@@ -68,8 +68,10 @@ public class ConfigStruct {
 		feedout = (int) (conf.getDouble("FixTitleTime.Fadeout") * 20);
 
 		for (String world : conf.getConfigurationSection("Worlds").getKeys(false)) {
-			titles.put(world.toLowerCase(), new Messages(replaceColor(conf.getString("Worlds." + world + ".title", "")),
-					replaceColor(conf.getString("Worlds." + world + ".subtitle", ""))));
+			titles.put(world.toLowerCase(), new Messages(
+					replaceColor(conf.getString("Worlds." + world + ".title", "")),
+					replaceColor(conf.getString("Worlds." + world + ".subtitle", "")),
+					replaceColor(conf.getString("Worlds." + world + ".actionbar", ""))));
 		}
 
 		messageDontHavePermission = PREFIX_FAIL + replaceColor(conf.getString("Messages.Dont_Have_Permission"));
@@ -128,10 +130,12 @@ public class ConfigStruct {
 	public final class Messages {
 		public final String title;
 		public final String subTitle;
+		public final String actionBar;
 
-		public Messages(String title, String subTitle) {
+		public Messages(String title, String subTitle, String actionBar) {
 			this.title = title;
 			this.subTitle = subTitle;
+			this.actionBar = actionBar;
 		}
 	}
 

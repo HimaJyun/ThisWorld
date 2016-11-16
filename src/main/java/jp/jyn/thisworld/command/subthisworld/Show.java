@@ -41,7 +41,7 @@ public class Show implements SubExecuter {
 		String world = player.getWorld().getName().toLowerCase();
 		if (titles.containsKey(world)) { // 世界が登録されている
 			Messages message = titles.get(world);
-			titleSender.sendTitle(player, message.title, message.subTitle);
+			titleSender.sendTitle(player, message.title, message.subTitle, message.actionBar);
 		} else { // 世界が登録されていない
 			// 使えませんメッセージ
 			sender.sendMessage(conf.getMessageNotAvailable());

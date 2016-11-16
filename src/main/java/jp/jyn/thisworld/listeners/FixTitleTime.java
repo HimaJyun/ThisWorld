@@ -44,6 +44,6 @@ public class FixTitleTime implements Listener {
 	public void resetDisplaytime(PlayerJoinEvent e) {
 		Player player = e.getPlayer();
 		titleSender.resetTitle(player);
-		titleSender.setTime_tick(player, feedin, show, feedout);
+		titleSender.setTime(player, feedin, show, feedout);
 	}
 }

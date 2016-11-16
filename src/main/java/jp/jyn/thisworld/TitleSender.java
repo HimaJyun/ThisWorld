@@ -2,6 +2,7 @@ package jp.jyn.thisworld;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.bukkit.Bukkit;
@@ -18,8 +19,8 @@ public class TitleSender {
 	private String netMinecraftserver = "net.minecraft.server.";
 
 	private Object enumTitle, enumSubtitle, enumTime;
-	private Constructor<?> constructorTitle, constructorTime;
-	private Method methodTitle, methodHandle, methodSendpacket;
+	private Constructor<?> constructorTitle, constructorTime, constructorActionBar;
+	private Method methodChatSerializer, methodHandle, methodSendpacket;
 	private Field fieldConnection;
 
 	/**
@@ -42,21 +43,24 @@ public class TitleSender {
 			// 必要なclassを取得します。
 			enumTitle = tmp_packetPlayout.getDeclaredClasses()[0].getField("TITLE").get(null);
 			enumSubtitle = tmp_packetPlayout.getDeclaredClasses()[0].getField("SUBTITLE").get(null);
-			methodTitle = tmp_ichatBase.getDeclaredClasses()[0].getMethod("a", String.class);
+			enumTime = tmp_packetPlayoutEnumtitle.getEnumConstants()[2];
+
 			constructorTitle = tmp_packetPlayout.getConstructor(tmp_packetPlayout.getDeclaredClasses()[0],
 					tmp_ichatBase);
 			constructorTime = tmp_packetPlayout.getConstructor(tmp_packetPlayoutEnumtitle, tmp_ichatBase, int.class,
 					int.class, int.class);
-			enumTime = tmp_packetPlayoutEnumtitle.getEnumConstants()[2];
+			constructorActionBar = getNMSClass("PacketPlayOutChat").getConstructor(tmp_ichatBase, byte.class);
 
+			methodChatSerializer = getNMSClass("IChatBaseComponent$ChatSerializer").getMethod("a", String.class);
+			methodSendpacket = getNMSClass("PlayerConnection").getMethod("sendPacket", getNMSClass("Packet"));
 			try {
 				methodHandle = Class.forName("org.bukkit.craftbukkit." + tmp_version + "entity.CraftPlayer")
 						.getMethod("getHandle");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+
 			fieldConnection = getNMSClass("EntityPlayer").getField("playerConnection");
-			methodSendpacket = getNMSClass("PlayerConnection").getMethod("sendPacket", getNMSClass("Packet"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -68,31 +72,40 @@ public class TitleSender {
 	 * @param player
 	 */
 	public void resetTitle(Player player) {
-		sendTitle(player, "", "");
+		sendTitle(player, "", "", "");
 	}
 
 	/**
 	 * タイトルを送信します。
 	 *
-	 * @param player
-	 *            対象のプレイヤー
-	 * @param title
-	 *            表示するメインタイトル、無い場合はnull
-	 * @param subtitle
-	 *            表示するサブタイトル、無い場合はnull
+	 * @param player 対象のプレイヤー
+	 * @param title 表示するメインタイトル、無い場合はnull
+	 * @param subtitle 表示するサブタイトル、無い場合はnull
+	 * @param actionBar 表示するアクションバー、無い場合はnull
 	 */
-	public void sendTitle(Player player, String title, String subtitle) {
+	public void sendTitle(Player player, String title, String subtitle, String actionBar) {
 		try {
 			if (title != null) {
-				sendPacket(player, constructorTitle.newInstance(enumTitle,
-						methodTitle.invoke(null, "{\"text\":\"" + title + "\"}")));
+				sendPacket(player, constructorTitle.newInstance(
+						enumTitle,
+						methodChatSerializer.invoke(null, "{\"text\":\"" + title + "\"}")));
 			}
 
 			if (subtitle != null) {
-				sendPacket(player, constructorTitle.newInstance(enumSubtitle,
-						methodTitle.invoke(null, "{\"text\":\"" + subtitle + "\"}")));
+				sendPacket(player, constructorTitle.newInstance(
+						enumSubtitle,
+						methodChatSerializer.invoke(null, "{\"text\":\"" + subtitle + "\"}")));
 			}
-		} catch (Exception e) {
+
+			if (actionBar != null) {
+				sendPacket(player, constructorActionBar.newInstance(
+						methodChatSerializer.invoke(null, "{\"text\":\"" + actionBar + "\"}"),
+						(byte) 2));
+			}
+		} catch (IllegalAccessException
+				| InstantiationException
+				| IllegalArgumentException
+				| InvocationTargetException e) {
 			e.printStackTrace();
 		}
 	}
@@ -100,51 +113,30 @@ public class TitleSender {
 	/**
 	 * タイトルを表示する時間を設定します(単位::second)
 	 *
-	 * @param player
-	 *            対象のプレイヤー
-	 * @param feedIn
-	 *            タイトルのフェードイン
-	 * @param titleShow
-	 *            タイトルの表示時間
-	 * @param feedOut
-	 *            タイトルのフェードアウト
+	 * @param player 対象のプレイヤー
+	 * @param feedIn タイトルのフェードイン
+	 * @param titleShow タイトルの表示時間
+	 * @param feedOut タイトルのフェードアウト
 	 */
-	public void setTime_second(Player player, double feedIn, double titleShow, double feedOut) {
-		setTime_tick(player, (int) (feedIn * 20), (int) (titleShow * 20), (int) (feedOut * 20));
-	}
-
-	/**
-	 * タイトルを表示する時間を設定します(単位::second)
-	 *
-	 * @param player
-	 *            対象のプレイヤー
-	 * @param feedIn
-	 *            タイトルのフェードイン
-	 * @param titleShow
-	 *            タイトルの表示時間
-	 * @param feedOut
-	 *            タイトルのフェードアウト
-	 */
-	public void setTime_second(Player player, int feedIn, int titleShow, int feedOut) {
-		setTime_tick(player, feedIn * 20, titleShow * 20, feedOut * 20);
+	public void setTime(Player player, double feedIn, double titleShow, double feedOut) {
+		setTime(player, (int) (feedIn * 20), (int) (titleShow * 20), (int) (feedOut * 20));
 	}
 
 	/**
 	 * タイトルを表示する時間を設定します(単位::tick)
 	 *
-	 * @param player
-	 *            対象のプレイヤー
-	 * @param feedIn
-	 *            タイトルのフェードイン
-	 * @param titleShow
-	 *            タイトルの表示時間
-	 * @param feedOut
-	 *            タイトルのフェードアウト
+	 * @param player 対象のプレイヤー
+	 * @param feedIn タイトルのフェードイン
+	 * @param titleShow タイトルの表示時間
+	 * @param feedOut タイトルのフェードアウト
 	 */
-	public void setTime_tick(Player player, int feedIn, int titleShow, int feedOut) {
+	public void setTime(Player player, int feedIn, int titleShow, int feedOut) {
 		try {
 			sendPacket(player, constructorTime.newInstance(enumTime, null, feedIn, titleShow, feedOut));
-		} catch (Exception e) {
+		} catch (IllegalAccessException
+				| InstantiationException
+				| IllegalArgumentException
+				| InvocationTargetException e) {
 			e.printStackTrace();
 		}
 	}

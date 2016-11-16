@@ -35,7 +35,7 @@ public class Fix implements SubExecuter {
 		Player player = (Player) sender;
 		// 表示時間を修正
 		titleSender.resetTitle(player);
-		titleSender.setTime_tick(player, conf.getFeedin(), conf.getShow(), conf.getFeedout());
+		titleSender.setTime(player, conf.getFeedin(), conf.getShow(), conf.getFeedout());
 		sender.sendMessage(conf.getMessageFixed());
 	}
 }
