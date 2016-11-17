@@ -18,7 +18,7 @@ public class TitleSender {
 	// class取得用の変数
 	private String netMinecraftserver = "net.minecraft.server.";
 
-	private Object enumTitle, enumSubtitle, enumTime;
+	private Object enumTitle, enumSubtitle, enumTimes;
 	private Constructor<?> constructorTitle, constructorTime, constructorActionBar;
 	private Method methodChatSerializer, methodHandle, methodSendpacket;
 	private Field fieldConnection;
@@ -38,16 +38,16 @@ public class TitleSender {
 			// 一時的に使用する変数です、必要なclassを取得しています。
 			Class<?> tmp_packetPlayout = getNMSClass("PacketPlayOutTitle"),
 					tmp_ichatBase = getNMSClass("IChatBaseComponent"),
-					tmp_packetPlayoutEnumtitle = getNMSClass("PacketPlayOutTitle$EnumTitleAction");
+					tmpEnumTitleAction = getNMSClass("PacketPlayOutTitle$EnumTitleAction");
 
 			// 必要なclassを取得します。
-			enumTitle = tmp_packetPlayout.getDeclaredClasses()[0].getField("TITLE").get(null);
-			enumSubtitle = tmp_packetPlayout.getDeclaredClasses()[0].getField("SUBTITLE").get(null);
-			enumTime = tmp_packetPlayoutEnumtitle.getEnumConstants()[2];
+			enumTitle = tmpEnumTitleAction.getDeclaredField("TITLE").get(null);
+			enumSubtitle = tmpEnumTitleAction.getDeclaredField("SUBTITLE").get(null);
+			enumTimes = tmpEnumTitleAction.getDeclaredField("TIMES").get(null);
 
 			constructorTitle = tmp_packetPlayout.getConstructor(tmp_packetPlayout.getDeclaredClasses()[0],
 					tmp_ichatBase);
-			constructorTime = tmp_packetPlayout.getConstructor(tmp_packetPlayoutEnumtitle, tmp_ichatBase, int.class,
+			constructorTime = tmp_packetPlayout.getConstructor(tmpEnumTitleAction, tmp_ichatBase, int.class,
 					int.class, int.class);
 			constructorActionBar = getNMSClass("PacketPlayOutChat").getConstructor(tmp_ichatBase, byte.class);
 
@@ -132,7 +132,7 @@ public class TitleSender {
 	 */
 	public void setTime(Player player, int feedIn, int titleShow, int feedOut) {
 		try {
-			sendPacket(player, constructorTime.newInstance(enumTime, null, feedIn, titleShow, feedOut));
+			sendPacket(player, constructorTime.newInstance(enumTimes, null, feedIn, titleShow, feedOut));
 		} catch (IllegalAccessException
 				| InstantiationException
 				| IllegalArgumentException
