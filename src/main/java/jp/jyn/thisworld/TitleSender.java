@@ -18,7 +18,7 @@ public class TitleSender {
 	// class取得用の変数
 	private String netMinecraftserver = "net.minecraft.server.";
 
-	private Object enumTitle, enumSubtitle, enumTimes;
+	private Object enumTitle, enumSubtitle;
 	private Constructor<?> constructorTitle, constructorTime, constructorActionBar;
 	private Method methodChatSerializer, methodHandle, methodSendpacket;
 	private Field fieldConnection;
@@ -29,32 +29,29 @@ public class TitleSender {
 	public TitleSender() {
 		try {
 			// 一時的に使用する変数です、Bukkitのバージョンを取得しています。
-			String tmp_package[] = Bukkit.getServer().getClass().getPackage().getName().split("\\.");
-			String tmp_version = tmp_package[tmp_package.length - 1] + ".";
+			String tmpPackage[] = Bukkit.getServer().getClass().getPackage().getName().split("\\.");
+			String tmpVersion = tmpPackage[tmpPackage.length - 1] + ".";
 
 			// サーババージョンの取得&結合
-			netMinecraftserver += tmp_version;
+			netMinecraftserver += tmpVersion;
 
 			// 一時的に使用する変数です、必要なclassを取得しています。
-			Class<?> tmp_packetPlayout = getNMSClass("PacketPlayOutTitle"),
-					tmp_ichatBase = getNMSClass("IChatBaseComponent"),
+			Class<?> tmpPacketPlayout = getNMSClass("PacketPlayOutTitle"),
+					tmpIchatBase = getNMSClass("IChatBaseComponent"),
 					tmpEnumTitleAction = getNMSClass("PacketPlayOutTitle$EnumTitleAction");
 
 			// 必要なclassを取得します。
 			enumTitle = tmpEnumTitleAction.getDeclaredField("TITLE").get(null);
 			enumSubtitle = tmpEnumTitleAction.getDeclaredField("SUBTITLE").get(null);
-			enumTimes = tmpEnumTitleAction.getDeclaredField("TIMES").get(null);
 
-			constructorTitle = tmp_packetPlayout.getConstructor(tmp_packetPlayout.getDeclaredClasses()[0],
-					tmp_ichatBase);
-			constructorTime = tmp_packetPlayout.getConstructor(tmpEnumTitleAction, tmp_ichatBase, int.class,
-					int.class, int.class);
-			constructorActionBar = getNMSClass("PacketPlayOutChat").getConstructor(tmp_ichatBase, byte.class);
+			constructorTitle = tmpPacketPlayout.getConstructor(tmpEnumTitleAction, tmpIchatBase);
+			constructorTime = tmpPacketPlayout.getConstructor(int.class, int.class, int.class);
+			constructorActionBar = getNMSClass("PacketPlayOutChat").getConstructor(tmpIchatBase, byte.class);
 
 			methodChatSerializer = getNMSClass("IChatBaseComponent$ChatSerializer").getMethod("a", String.class);
 			methodSendpacket = getNMSClass("PlayerConnection").getMethod("sendPacket", getNMSClass("Packet"));
 			try {
-				methodHandle = Class.forName("org.bukkit.craftbukkit." + tmp_version + "entity.CraftPlayer")
+				methodHandle = Class.forName("org.bukkit.craftbukkit." + tmpVersion + "entity.CraftPlayer")
 						.getMethod("getHandle");
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -132,7 +129,7 @@ public class TitleSender {
 	 */
 	public void setTime(Player player, int feedIn, int titleShow, int feedOut) {
 		try {
-			sendPacket(player, constructorTime.newInstance(enumTimes, null, feedIn, titleShow, feedOut));
+			sendPacket(player, constructorTime.newInstance(feedIn, titleShow, feedOut));
 		} catch (IllegalAccessException
 				| InstantiationException
 				| IllegalArgumentException
