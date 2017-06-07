@@ -18,7 +18,7 @@ public class TitleSender {
 	// class取得用の変数
 	private String netMinecraftserver = "net.minecraft.server.";
 
-	private Object enumTitle, enumSubtitle;
+	private Object enumTitle, enumSubtitle, enumActionBar;
 	private Constructor<?> constructorTitle, constructorTime, constructorActionBar;
 	private Method methodChatSerializer, methodHandle, methodSendpacket;
 	private Field fieldConnection;
@@ -38,7 +38,8 @@ public class TitleSender {
 			// 一時的に使用する変数です、必要なclassを取得しています。
 			Class<?> tmpPacketPlayout = getNMSClass("PacketPlayOutTitle"),
 					tmpIchatBase = getNMSClass("IChatBaseComponent"),
-					tmpEnumTitleAction = getNMSClass("PacketPlayOutTitle$EnumTitleAction");
+					tmpEnumTitleAction = getNMSClass("PacketPlayOutTitle$EnumTitleAction"),
+					tmpChatMessageType = getNMSClass("ChatMessageType");
 
 			// 必要なclassを取得します。
 			enumTitle = tmpEnumTitleAction.getDeclaredField("TITLE").get(null);
@@ -46,8 +47,9 @@ public class TitleSender {
 
 			constructorTitle = tmpPacketPlayout.getConstructor(tmpEnumTitleAction, tmpIchatBase);
 			constructorTime = tmpPacketPlayout.getConstructor(int.class, int.class, int.class);
-			constructorActionBar = getNMSClass("PacketPlayOutChat").getConstructor(tmpIchatBase, byte.class);
 
+			constructorActionBar = getNMSClass("PacketPlayOutChat").getConstructor(tmpIchatBase, tmpChatMessageType);
+			enumActionBar = tmpChatMessageType.getField("ACTION_BAR").get(null);
 			methodChatSerializer = getNMSClass("IChatBaseComponent$ChatSerializer").getMethod("a", String.class);
 			methodSendpacket = getNMSClass("PlayerConnection").getMethod("sendPacket", getNMSClass("Packet"));
 			try {
@@ -97,7 +99,7 @@ public class TitleSender {
 			if (actionBar != null) {
 				sendPacket(player, constructorActionBar.newInstance(
 						methodChatSerializer.invoke(null, "{\"text\":\"" + actionBar + "\"}"),
-						(byte) 2));
+						enumActionBar));
 			}
 		} catch (IllegalAccessException
 				| InstantiationException
