@@ -49,7 +49,7 @@ public class TitleSender {
 			constructorTime = tmpPacketPlayout.getConstructor(int.class, int.class, int.class);
 
 			constructorActionBar = getNMSClass("PacketPlayOutChat").getConstructor(tmpIchatBase, tmpChatMessageType);
-			enumActionBar = tmpChatMessageType.getField("ACTION_BAR").get(null);
+			enumActionBar = tmpChatMessageType.getField("GAME_INFO").get(null);
 			methodChatSerializer = getNMSClass("IChatBaseComponent$ChatSerializer").getMethod("a", String.class);
 			methodSendpacket = getNMSClass("PlayerConnection").getMethod("sendPacket", getNMSClass("Packet"));
 			try {

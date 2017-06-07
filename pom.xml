@@ -2,12 +2,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<java.version>1.7</java.version>
+		<java.version>1.8</java.version>
 	</properties>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>jp.jyn</groupId>
 	<artifactId>ThisWorld</artifactId>
-	<version>1.4</version>
+	<version>1.5-dev</version>
 	<build>
 		<plugins>
 			<plugin>
@@ -38,7 +38,7 @@
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
-			<version>1.11-R0.1-SNAPSHOT</version>
+			<version>1.11.2-R0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>
