@@ -4,9 +4,9 @@ import org.bukkit.command.CommandSender;
 
 import jp.jyn.thisworld.ConfigLoader;
 import jp.jyn.thisworld.ThisWorld;
-import jp.jyn.thisworld.command.SubExecuter;
+import jp.jyn.thisworld.command.SubExecutor;
 
-public class Reload implements SubExecuter {
+public class Reload implements SubExecutor {
 
     private final ThisWorld thisworld;
     private final ConfigLoader.Message message;

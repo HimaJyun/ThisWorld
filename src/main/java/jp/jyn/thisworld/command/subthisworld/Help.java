@@ -2,11 +2,11 @@ package jp.jyn.thisworld.command.subthisworld;
 
 import jp.jyn.thisworld.ConfigLoader;
 import jp.jyn.thisworld.ThisWorld;
-import jp.jyn.thisworld.command.SubExecuter;
+import jp.jyn.thisworld.command.SubExecutor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-public class Help implements SubExecuter {
+public class Help implements SubExecutor {
 
     private final ConfigLoader.Message message;
     private final String header =

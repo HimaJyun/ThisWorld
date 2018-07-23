@@ -15,11 +15,11 @@ public class ChangedWorldListener implements Listener {
 
     private final ActionBarSender actionbar;
 
-    private final Map<String, Title> title;
+    private final Map<String, Title> titles;
 
     public ChangedWorldListener(ThisWorld thisworld) {
         actionbar = new ActionBarSender();
-        title = thisworld.getConf().getTitle();
+        titles = thisworld.getConf().getTitles();
 
         thisworld.getServer().getPluginManager().registerEvents(this, thisworld);
     }
@@ -30,11 +30,11 @@ public class ChangedWorldListener implements Listener {
         Player player = e.getPlayer();
         String world = player.getWorld().getName().toLowerCase();
 
-        if (title.containsKey(world)) { // 世界が登録されている
-            ConfigLoader.Title message = title.get(world);
+        if (titles.containsKey(world)) { // 世界が登録されている
+            ConfigLoader.Title title = titles.get(world);
 
-            player.sendTitle(message.title, message.subTitle, message.fadein, message.stay, message.fadeout);
-            actionbar.send(player, message.actionBar);
+            player.sendTitle(title.title, title.subTitle, title.fadein, title.stay, title.fadeout);
+            actionbar.send(player, title.actionBar);
         }
     }
 }

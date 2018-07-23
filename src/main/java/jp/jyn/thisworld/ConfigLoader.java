@@ -17,7 +17,7 @@ public class ConfigLoader {
     private final Plugin plg;
 
     public Message message;
-    private Map<String, Title> title = new HashMap<>();
+    private Map<String, Title> titles = new HashMap<>();
 
     public ConfigLoader(Plugin plg) {
         this.plg = plg;
@@ -35,7 +35,7 @@ public class ConfigLoader {
         for (String world : conf.getConfigurationSection("Worlds").getKeys(false)) {
             tmp.put(world.toLowerCase(), new Title(conf, world));
         }
-        title = Collections.unmodifiableMap(tmp);
+        titles = Collections.unmodifiableMap(tmp);
 
         return this;
     }
@@ -82,7 +82,7 @@ public class ConfigLoader {
         public final int fadeout;
 
         private Title(FileConfiguration conf, String world) {
-            final DoubleToIntFunction convertTick = d -> (int) d * 20;
+            final DoubleToIntFunction convertTick = d -> (int) (d * 20);
             final double defaultFadein = conf.getDouble("DefaultTime.fadein");
             final double defaultStay = conf.getDouble("DefaultTime.stay");
             final double defaultFadeout = conf.getDouble("DefaultTime.fadeout");
@@ -97,7 +97,7 @@ public class ConfigLoader {
         }
     }
 
-    public Map<String, Title> getTitle() {
-        return title;
+    public Map<String, Title> getTitles() {
+        return titles;
     }
 }

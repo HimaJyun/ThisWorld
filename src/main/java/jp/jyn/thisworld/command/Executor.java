@@ -15,10 +15,10 @@ import java.util.Map;
 
 public class Executor implements CommandExecutor {
 
-    private final Map<String, SubExecuter> subCommands;
+    private final Map<String, SubExecutor> subCommands;
 
     public Executor(ThisWorld thisworld) {
-        Map<String, SubExecuter> commands = new HashMap<>();
+        Map<String, SubExecutor> commands = new HashMap<>();
 
         commands.put("show", new Show(thisworld));
         commands.put("reload", new Reload(thisworld));

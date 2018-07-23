@@ -19,9 +19,9 @@ public class ThisWorld extends JavaPlugin {
         }
 
         // コマンド登録
-        Executor executer = new Executor(this);
-        getCommand("tw").setExecutor(executer);
-        getCommand("thisworld").setExecutor(executer);
+        Executor executor = new Executor(this);
+        getCommand("tw").setExecutor(executor);
+        getCommand("thisworld").setExecutor(executor);
 
         // イベントの登録
         new ChangedWorldListener(this);

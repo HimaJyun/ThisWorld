@@ -4,24 +4,24 @@ import jp.jyn.thisworld.ActionBarSender;
 import jp.jyn.thisworld.ConfigLoader;
 import jp.jyn.thisworld.ConfigLoader.Title;
 import jp.jyn.thisworld.ThisWorld;
-import jp.jyn.thisworld.command.SubExecuter;
+import jp.jyn.thisworld.command.SubExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
 
-public class Show implements SubExecuter {
+public class Show implements SubExecutor {
 
     private final ActionBarSender actionbar;
 
-    private final Map<String, Title> title;
+    private final Map<String, Title> titles;
     private final ConfigLoader.Message message;
 
     public Show(ThisWorld thisworld) {
         actionbar = new ActionBarSender();
 
         message = thisworld.getConf().message;
-        title = thisworld.getConf().getTitle();
+        titles = thisworld.getConf().getTitles();
     }
 
     @Override
@@ -41,11 +41,11 @@ public class Show implements SubExecuter {
         Player player = (Player) sender;
         String world = player.getWorld().getName().toLowerCase();
 
-        if (title.containsKey(world)) { // 世界が登録されている
-            ConfigLoader.Title message = title.get(world);
+        if (titles.containsKey(world)) { // 世界が登録されている
+            ConfigLoader.Title title = titles.get(world);
 
-            player.sendTitle(message.title, message.subTitle, message.fadein, message.stay, message.fadeout);
-            actionbar.send(player, message.actionBar);
+            player.sendTitle(title.title, title.subTitle, title.fadein, title.stay, title.fadeout);
+            actionbar.send(player, title.actionBar);
         } else { // 世界が登録されていない
             // 使えませんメッセージ
             sender.sendMessage(message.notAvailable);
