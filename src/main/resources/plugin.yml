@@ -3,6 +3,7 @@ name: "${project.artifactId}"
 version: "${project.version}"
 website: https://jyn.jp/
 author: '@HimaJyun'
+api-version: 1.13
 
 commands:
    thisworld:

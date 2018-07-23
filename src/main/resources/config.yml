@@ -1,22 +1,18 @@
 Messages:
-  Dont_Have_Permission: "&cYou don't have permission."
-  Not_Available: "&cNot available in this world."
-  Config_Reloaded: "&aConfig has been reloaded."
-  Fixed: "&aWas fixed display time."
+  DontHavePermission: "&cYou don't have permission."
+  NotAvailable: "&cNot available in this world."
+  ConfigReloaded: "&aConfig has been reloaded."
   Help:
     Help: "Show this help."
     Show: "Show title of this world."
-    Fix: "Fix display time."
     Reload: "Reload config file."
 
-FixTitleTime:
-# Will fix the display time of Title at the time of login of the player.
-# It provides fixes in command even when it is set to false.
-  Enable: true
-# In seconds...
-  Fadein: 0.5
-  Show: 1.75
-  Fadeout: 0.5
+# Time to display the title (Unit: seconds)
+# Notice: ActionBar has no effect
+DefaultTime:
+  fadein: 0.5
+  stay: 1.75
+  fadeout: 0.5
 
 Worlds:
   world:
@@ -32,5 +28,10 @@ Worlds:
 #  world_name:
 #    title: "maintitle message."
 #    subtitle: "&c&o&l&o&r&c&o&d&e subtitle message.(&&escape is &&)"
+#    actionbar: "actionbar message"
+#    # Overrides
+#    fadein: 0.5
+#    stay: 1.75
+#    fadeout: 0.5
 # <------ Syntax
 # Color code is lowercase.

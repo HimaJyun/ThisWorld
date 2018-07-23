@@ -2,6 +2,7 @@ package jp.jyn.thisworld.command;
 
 import org.bukkit.command.CommandSender;
 
+@FunctionalInterface
 public interface SubExecuter {
-	abstract void onCommand(CommandSender sender, String[] args);
+    void onCommand(CommandSender sender, String[] args);
 }
