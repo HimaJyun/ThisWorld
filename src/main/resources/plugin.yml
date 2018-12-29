@@ -1,25 +1,17 @@
-main: ${project.groupId}.thisworld.${project.artifactId}
+main: "jp.jyn.thisworld.ThisWorld"
 name: "${project.artifactId}"
 version: "${project.version}"
-website: https://jyn.jp/
+website: "https://github.com/HimaJyun/ThisWorld"
 author: '@HimaJyun'
 api-version: 1.13
 
 commands:
-   thisworld:
-     description: 'Show this world name.'
-   tw:
-     description: 'Alias of "/thisworld"'
+    thisworld:
+        description: 'Show this world name.'
+        aliases: tw
 
 permissions:
-  thisworld.*:
-    children:
-      thisworld.show: true
-      thisworld.fix: true
-      thisworld.reload: true
-  thisworld.show:
-    default: true
-  thisworld.fix:
-    default: true
-  thisworld.reload:
-    default: op
+    thisworld.show:
+        default: true
+    thisworld.reload:
+        default: op

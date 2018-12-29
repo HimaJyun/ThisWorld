@@ -1,43 +1,29 @@
 package jp.jyn.thisworld;
 
-import jp.jyn.thisworld.command.Executor;
+import jp.jyn.thisworld.command.SubExecutor;
 import jp.jyn.thisworld.listeners.ChangedWorldListener;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ThisWorld extends JavaPlugin {
-
-    // 設定
-    private ConfigLoader conf = null;
-
     @Override
     public void onEnable() {
-        if (conf == null) { // null == init
-            conf = new ConfigLoader(this);
-        } else { // null != reload
-            conf.loadConfig();
-        }
+        saveDefaultConfig();
+        reloadConfig();
+        MainConfig config = new MainConfig(getConfig());
 
-        // コマンド登録
-        Executor executor = new Executor(this);
-        getCommand("tw").setExecutor(executor);
+        SubExecutor executor = new SubExecutor(this, config);
         getCommand("thisworld").setExecutor(executor);
+        getCommand("thisworld").setTabCompleter(executor);
 
-        // イベントの登録
-        new ChangedWorldListener(this);
+        getServer().getPluginManager().registerEvents(new ChangedWorldListener(config), this);
     }
 
     @Override
     public void onDisable() {
-        // イベントの登録解除
         HandlerList.unregisterAll(this);
 
-        // コマンドの登録解除
-        getCommand("tw").setExecutor(this);
+        getCommand("thisworld").setTabCompleter(this);
         getCommand("thisworld").setExecutor(this);
-    }
-
-    public ConfigLoader getConf() {
-        return conf;
     }
 }

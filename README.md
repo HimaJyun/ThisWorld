@@ -1,5 +1,9 @@
 # ThisWorld
-Bukkit/Spigot用、世界を移動した際に/titleを表示させる。  
-英語で書くのはダルいので海外ユーザ向けのREADMEは諦めますた。  
+Display title when moving to another world
 
-詳しくは「[僕のブログ](https://jyn.jp/bukkit-thisworld/)」をご覧下さい。
+# Command/Permission
+|Command|Description|Permission|Default|
+|:------|:----------|:---------|:------|
+|/thisworld show|Show title|thisworld.show|ALL|
+|/thisworld reload|Reload config|thisworld.reload|OP|
+|/thisworld help|Show help|N/A|ALL|

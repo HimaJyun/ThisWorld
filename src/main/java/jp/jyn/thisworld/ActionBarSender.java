@@ -8,7 +8,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class ActionBarSender {
     private Object enumActionBar;
@@ -17,10 +16,8 @@ public class ActionBarSender {
     private Field fieldConnection;
 
     public ActionBarSender() {
-        final String version = ((Supplier<String>) () -> {
-            String tmp[] = Bukkit.getServer().getClass().getPackage().getName().split("\\.");
-            return tmp[tmp.length - 1];
-        }).get();
+        String[] tmp = Bukkit.getServer().getClass().getPackage().getName().split("\\.");
+        final String version = tmp[tmp.length - 1];
 
         final Function<String, Class<?>> getNMS = name -> {
             try {
